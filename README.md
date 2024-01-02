@@ -2,6 +2,10 @@
 
 Color terminal output from stdout. That is all.
 
+```zsh
+echo "hello world" | quick-color '#0a0'
+```
+
 I had a hard time finding a binary that does this. Someone point it out if it exists.
 
 The main goal is to produce colored terminal output for tailing log levels in a way that doesn't involve hard-to-understand escape sequences.
