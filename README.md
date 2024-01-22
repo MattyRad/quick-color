@@ -8,7 +8,13 @@ echo "hello world" | quick-color '#0a0'
 
 I had a hard time finding a binary that does this. Someone point it out if it exists.
 
-The main goal is to produce colored terminal output for tailing log levels in a way that doesn't involve hard-to-understand escape sequences.
+The main goal is to produce colored terminal output for tailing log levels in a way that doesn't use hard-to-understand escape sequences.
+
+## Installation
+
+See [releases](https://github.com/MattyRad/quick-color/releases).
+
+## Examples
 
 ```zsh
 #!/usr/bin/env zsh
