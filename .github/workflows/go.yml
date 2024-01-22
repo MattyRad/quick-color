@@ -8,9 +8,19 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        required: false
+        default: 'info'
+        type: choice
+        options:
+        - debug
+        - info
+        - notice
+        - warning
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
