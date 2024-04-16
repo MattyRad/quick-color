@@ -10,72 +10,54 @@ import (
 	"github.com/spf13/viper"
 )
 
+func colorize(str string, foreground string) termenv.Style {
+	output := termenv.NewOutput(os.Stdout)
+	colored := output.String(str).Foreground(output.Color(foreground))
+
+	bold := viper.GetBool("bold")
+	italic := viper.GetBool("italic")
+	faint := viper.GetBool("faint")
+	strike := viper.GetBool("strike")
+	underline := viper.GetBool("underline")
+
+	if bold {
+		colored = colored.Bold()
+	}
+
+	if italic {
+		colored = colored.Italic()
+	}
+
+	if faint {
+		colored = colored.Faint()
+	}
+
+	if strike {
+		colored = colored.CrossOut()
+	}
+
+	if underline {
+		colored = colored.Underline()
+	}
+
+	return colored
+}
+
 var rootCmd = &cobra.Command{
 	Use:   "quick-color",
 	Short: "It colors.",
 	Long:  `Really, that's about it, it colors.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		output := termenv.NewOutput(os.Stdout)
+		foreground := "#fff"
 
-		scanner := bufio.NewScanner(os.Stdin)
-
-		for scanner.Scan() {
-			var inputLines []string
-
-			line := scanner.Text()
-
-			inputLines = append(inputLines, line)
-
-			allInput := ""
-			if len(inputLines) > 0 {
-				allInput = inputLines[0]
-				for i := 1; i < len(inputLines); i++ {
-					allInput += "\n" + inputLines[i]
-				}
-			}
-
-			s := output.String(allInput)
-
-			if len(args) < 1 {
-				fmt.Println(s)
-				os.Exit(1)
-			}
-
-			arg_color := args[0]
-
-			colored := s.Foreground(output.Color(arg_color))
-
-			bold := viper.GetBool("bold")
-			italic := viper.GetBool("italic")
-			faint := viper.GetBool("faint")
-			strike := viper.GetBool("strike")
-			underline := viper.GetBool("underline")
-
-			if bold {
-				colored = colored.Bold()
-			}
-
-			if italic {
-				colored = colored.Italic()
-			}
-
-			if faint {
-				colored = colored.Faint()
-			}
-
-			if strike {
-				colored = colored.CrossOut()
-			}
-
-			if underline {
-				colored = colored.Underline()
-			}
-
-			fmt.Println(colored)
-
-			os.Stdout.Sync()
+		if len(args) >= 1 {
+			foreground = args[0]
 		}
 
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			fmt.Println(colorize(scanner.Text(), foreground))
+		}
 		if err := scanner.Err(); err != nil {
 			fmt.Fprintln(os.Stderr, "Error reading input:", err)
 		}
